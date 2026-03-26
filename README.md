@@ -1,1 +1,3 @@
-# parking_lot
+# Parking Lot
+
+Automated parking lot system.
