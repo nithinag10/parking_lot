@@ -1,1 +1,7 @@
 #!/usr/bin/env bash
+cd "$(dirname "$0")/.."
+if [ -n "$1" ]; then
+    python -m parking_lot.main "$1"
+else
+    python -m parking_lot.main
+fi
