@@ -1,4 +1,4 @@
-from parking_lot.parking_lot import ParkingLot, ParkingLotFullError
+from parking_lot.parking_lot import ParkingLot, ParkingLotFullError, DuplicateCarError, InvalidSlotError
 
 
 class CommandProcessor:
@@ -14,15 +14,23 @@ class CommandProcessor:
         if command == "create_parking_lot":
             self.lot = ParkingLot(int(parts[1]))
             return f"Created a parking lot with {parts[1]} slots"
-        elif command == "park":
+
+        if command == "park":
+            if self.lot is None:
+                return "Please create a parking lot first using: create_parking_lot <capacity>"
             try:
                 slot = self.lot.park(parts[1], parts[2])
                 return f"Allocated slot number: {slot}"
             except ParkingLotFullError:
                 return "Sorry, parking lot is full"
+            except DuplicateCarError:
+                return f"Car with registration number {parts[1]} is already parked"
         elif command == "leave":
-            self.lot.leave(int(parts[1]))
-            return f"Slot number {parts[1]} is free"
+            try:
+                self.lot.leave(int(parts[1]))
+                return f"Slot number {parts[1]} is free"
+            except InvalidSlotError:
+                return f"Slot number {parts[1]} is already free"
         elif command == "registration_numbers_for_cars_with_colour":
             result = self.lot.get_registration_numbers_by_color(parts[1])
             return ", ".join(result) if result else "Not found"

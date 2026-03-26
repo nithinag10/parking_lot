@@ -5,12 +5,22 @@ class ParkingLotFullError(Exception):
     pass
 
 
+class DuplicateCarError(Exception):
+    pass
+
+
+class InvalidSlotError(Exception):
+    pass
+
+
 class ParkingLot:
     def __init__(self, capacity):
         self.capacity = capacity
         self.slots = {}
 
     def park(self, reg_no, color):
+        if any(car.reg_no == reg_no for car in self.slots.values()):
+            raise DuplicateCarError
         for i in range(1, self.capacity + 1):
             if i not in self.slots:
                 self.slots[i] = Car(reg_no, color)
@@ -18,6 +28,8 @@ class ParkingLot:
         raise ParkingLotFullError
 
     def leave(self, slot_no):
+        if slot_no not in self.slots:
+            raise InvalidSlotError
         del self.slots[slot_no]
 
     def get_registration_numbers_by_color(self, color):

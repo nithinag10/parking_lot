@@ -11,13 +11,18 @@ def main():
                 if output:
                     print(output)
     else:
+        print("Parking Lot System. Type 'exit' to quit.")
         while True:
             try:
-                line = input()
+                line = input("> ")
+                if line.strip() == "exit":
+                    print("Exiting.")
+                    break
                 output = processor.process(line)
                 if output:
                     print(output)
             except (EOFError, KeyboardInterrupt):
+                print("\nExiting.")
                 break
 
 
